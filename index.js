@@ -1,9 +1,10 @@
 const express = require('express');
 const { dbConnection, testDbConnection } = require('./utils/db');
 const cors = require('cors');
-const routes = require('./routes');
-const response = require('./utils/response');
+const { route } = require('./routes/routes');
+const { errorResponse } = require('./utils/response');
 require('dotenv').config();
+const { PORT } = require('./config');
 
 const app = express();
 
@@ -19,19 +20,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Routes
-app.use(routes);
+app.use(route);
 
 // middleware for handling file not found error
 app.use((req, res, next) => {
 	const err = new Error('Request not found');
-	res.status(404).json(response.error(err, 404));
+	res.status(404).json(errorResponse(err, 404));
 });
 
 // middleware for handling all errors
 app.use((err, req, res, next) => {
 	const error = app.get('env') === 'development' ? err : {};
 	const status = err.status || 500;
-	res.status(500).json(response.error(error, status));
+	res.status(500).json(errorResponse(error, status));
 });
 
-module.exports = app;
+app.listen(PORT || 3000, () => console.log(`server started on port ${PORT}`));
+// module.exports = app;
