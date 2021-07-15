@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
-const { LocalConfig } = require('./config');
+const { DBURL, TESTDBURL } = require('../config');
 
 function dbConnection() {
-	const DB_URL = LocalConfig.DB_URL;
 	mongoose.connect(
-		DB_URL,
+		DBURL,
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
-			useFindAndModify: true,
-			useCreateIndex: true
+			useFindAndModify: false,
+			useCreateIndex: true,
 		},
 		(error) => {
 			if (error) return new Error('Failed to connect to database');
@@ -19,9 +18,8 @@ function dbConnection() {
 }
 
 function testDbConnection() {
-	const DB_URL = LocalConfig.TEST_DB_URL;
 	mongoose.connect(
-		DB_URL,
+		TESTDBURL,
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
