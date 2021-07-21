@@ -18,11 +18,11 @@ module.exports = {
 
 			if (user) {
 				return res
-					.status(401)
+					.status(423)
 					.json(
 						errorResponse(
 							'User already exist, please login or use forget password',
-							401
+							423
 						)
 					);
 			}
@@ -41,14 +41,13 @@ module.exports = {
 					null,
 					{
 						fullName: data.fullName,
-						token,
-						_id: data._id
+						token
 					},
 					201
 				)
 			);
 		} catch (error) {
-			next(error);
+			next(errorResponse(error.message, 500));
 		}
 	},
 
@@ -62,27 +61,19 @@ module.exports = {
 				const pass = await decryptPassword(password, user.password);
 				if (!pass) {
 					return res
-						.status(422)
-						.json(errorResponse('Invalid username or password', 422));
+						.status(401)
+						.json(errorResponse('Invalid username or password', 401));
 				}
 
 				const token = await genToken(user._id, user.role);
 				return res
 					.status(200)
-					.json(
-						successResponse(
-							null,
-							{ token, fullName: user.fullName, _id: user._id },
-							200
-						)
-					);
+					.json(successResponse(null, { token, fullName: user.fullName }, 200));
 			} else {
 				return res.json(errorResponse('User does not exist', 404));
 			}
 		} catch (error) {
-			next(error);
+			next(errorResponse(error.message, 500));
 		}
-	},
-
-
+	}
 };
