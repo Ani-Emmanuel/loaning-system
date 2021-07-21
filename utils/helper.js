@@ -25,7 +25,9 @@ const decryptPassword = async (password, hashedPass) => {
 // Function for Generation token
 const genToken = async (id, role) => {
 	try {
-		const token = await jwt.sign({ _id: id, role: role }, process.env.SECRET);
+		const token = await jwt.sign({ _id: id, role: role }, process.env.SECRET, {
+			expiresIn: 60 * 60
+		});
 		return token;
 	} catch (error) {
 		return error;
