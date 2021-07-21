@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-function walletSchema() {
+function loanSchema() {
 	return Schema(
 		{
 			amount: { type: Number, required: true },
@@ -9,6 +9,7 @@ function walletSchema() {
 			total: { type: Number, default: 0 },
 			ref: { type: String, default: null },
 			paid: { type: Boolean, enum: [true, false], default: false },
+			refunds: { type: Number, default: 0 },
 			userId: {
 				type: mongoose.Schema.Types.ObjectId,
 				ref: 'User',
@@ -27,4 +28,4 @@ function walletSchema() {
 	);
 }
 
-module.exports = walletSchema;
+module.exports = loanSchema;

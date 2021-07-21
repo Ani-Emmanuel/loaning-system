@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const userSchema = require('./user');
-const walletSchema = require('./wallet');
+const loanSchema = require('./loan');
 
 module.exports = {
 	User: mongoose.model('User', userSchema()),
-	Wallet: mongoose.model('Wallet', walletSchema())
+	Loan: mongoose.model('Loan', loanSchema())
 };
